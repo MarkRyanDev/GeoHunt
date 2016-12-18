@@ -1,0 +1,36 @@
+<html>
+<head>
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+  <button onclick="getLocation()"> Get Location </button>
+  <pre id="message">message</pre>
+  <script>
+      function cloneAsObject(obj) {
+        if (obj === null || !(obj instanceof Object)) {
+            return obj;
+        }
+        var temp = (obj instanceof Array) ? [] : {};
+        // ReSharper disable once MissingHasOwnPropertyInForeach
+        for (var key in obj) {
+            temp[key] = cloneAsObject(obj[key]);
+        }
+        return temp;
+    }
+    function getLocation(){
+      if(!"geolocation" in navigator){
+        $('#message').html("ERROR: No geolocation support")
+        return
+      }
+      navigator.geolocation.getCurrentPosition(geo => {
+        let clone = cloneAsObject(geo)
+        $('#message').html(JSON.stringify(clone, null, 2))
+        $.post('/api/v1/location', clone.coords)
+      })
+    }
+  </script>
+</body>
+</html>
