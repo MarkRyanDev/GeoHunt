@@ -1,5 +1,6 @@
-var http = require('http')
+var https = require('https')
 var express = require('express')
+var fs = require('fs')
 
 var logger = require('morgan')
 var bodyParser = require('body-parser');
@@ -19,18 +20,22 @@ app.post('/api/v1/location', (req, res) => {
 
 
 app.use(express.static(web))
+var privateKey  = fs.readFileSync('server.key', 'utf8');
+var certificate = fs.readFileSync('server.crt', 'utf8');
+var cred = {key: privateKey, cert: certificate}
 
-var server = app.listen(8080, "127.0.0.1");
+// var server = app.listen(8080)
+var server = https.createServer(cred, app).listen(8443, ()=>{
+  console.log(`listening on port:${8443}`)
+})
 
 function gracefulShutdown(){
-    console.log('\nStarting Shutdown');
+    console.log('\nStarting Shutdown')
     server.close(() => {
-        console.log('\nShutdown Complete');
+        console.log('\nShutdown Complete')
     });
 }
 
-process.on('SIGTERM', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown)
 
-process.on('SIGINT', gracefulShutdown);
-
-console.log(`listening on port:${8080}`);
+process.on('SIGINT', gracefulShutdown)

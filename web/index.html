@@ -7,6 +7,7 @@
 </head>
 <body>
   <button onclick="getLocation()"> Get Location </button>
+  <p id="gotten"></p>
   <pre id="message">message</pre>
   <script>
       function cloneAsObject(obj) {
@@ -21,11 +22,13 @@
         return temp;
     }
     function getLocation(){
+      $('#gotten').html('getting...')
       if(!"geolocation" in navigator){
         $('#message').html("ERROR: No geolocation support")
         return
       }
       navigator.geolocation.getCurrentPosition(geo => {
+        $('#gotten').html('gotted!')
         let clone = cloneAsObject(geo)
         $('#message').html(JSON.stringify(clone, null, 2))
         $.post('/api/v1/location', clone.coords)
