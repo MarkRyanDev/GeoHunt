@@ -47,6 +47,13 @@
           center: {lat: geo.coords.latitude, lng: geo.coords.longitude},
           zoom: 16
         });
+        circle = new google.maps.Circle({
+          map: map,
+          center: {lat: geo.coords.latitude, lng: geo.coords.longitude},
+          radius: geo.coords.accuracy,
+          fillColor : '#238EDB',
+          lineColor : '#275DDB'
+        })
         $.post('/api/v1/location', clone.coords)
       })
     }
