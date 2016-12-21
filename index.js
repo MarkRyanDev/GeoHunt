@@ -20,8 +20,8 @@ app.post('/api/v1/location', (req, res) => {
 
 
 app.use(express.static(web))
-var privateKey  = fs.readFileSync('server.key', 'utf8');
-var certificate = fs.readFileSync('server.crt', 'utf8');
+var privateKey  = fs.readFileSync('secret/server.key', 'utf8');
+var certificate = fs.readFileSync('secret/server.crt', 'utf8');
 var cred = {key: privateKey, cert: certificate}
 
 // var server = app.listen(8080)

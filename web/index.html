@@ -9,13 +9,21 @@
   <button onclick="getLocation()"> Get Location </button>
   <p id="gotten"></p>
   <pre id="message">message</pre>
+  <div id='map'></div>
+  <style>
+
+  #map {
+    height: 50%;
+    width: 50%;
+  }
+
+</style>
   <script>
       function cloneAsObject(obj) {
         if (obj === null || !(obj instanceof Object)) {
             return obj;
         }
         var temp = (obj instanceof Array) ? [] : {};
-        // ReSharper disable once MissingHasOwnPropertyInForeach
         for (var key in obj) {
             temp[key] = cloneAsObject(obj[key]);
         }
@@ -27,13 +35,24 @@
         $('#message').html("ERROR: No geolocation support")
         return
       }
+      if(!google){
+        $('#message').html("Google Maps API not loaded")
+        return
+      }
       navigator.geolocation.getCurrentPosition(geo => {
         $('#gotten').html('gotted!')
         let clone = cloneAsObject(geo)
         $('#message').html(JSON.stringify(clone, null, 2))
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: geo.coords.latitude, lng: geo.coords.longitude},
+          zoom: 16
+        });
         $.post('/api/v1/location', clone.coords)
       })
     }
+
   </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_FST7U4gL1vUp_ekK6-BaNim9I3f3HSI"
+    async defer></script>
 </body>
 </html>
