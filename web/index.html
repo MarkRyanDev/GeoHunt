@@ -1,64 +1,24 @@
-<html>
+<!DOCTYPE html>
+<html lang='en'>
 <head>
   <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href='geohunt.css' rel='stylesheet'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <button onclick="getLocation()"> Get Location </button>
-  <p id="gotten"></p>
-  <pre id="message">message</pre>
-  <div id='map'></div>
-  <style>
-
-  #map {
-    height: 50%;
-    width: 50%;
-  }
-
-</style>
-  <script>
-      function cloneAsObject(obj) {
-        if (obj === null || !(obj instanceof Object)) {
-            return obj;
-        }
-        var temp = (obj instanceof Array) ? [] : {};
-        for (var key in obj) {
-            temp[key] = cloneAsObject(obj[key]);
-        }
-        return temp;
-    }
-    function getLocation(){
-      $('#gotten').html('getting...')
-      if(!"geolocation" in navigator){
-        $('#message').html("ERROR: No geolocation support")
-        return
-      }
-      if(!google){
-        $('#message').html("Google Maps API not loaded")
-        return
-      }
-      navigator.geolocation.getCurrentPosition(geo => {
-        $('#gotten').html('gotted!')
-        let clone = cloneAsObject(geo)
-        $('#message').html(JSON.stringify(clone, null, 2))
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: geo.coords.latitude, lng: geo.coords.longitude},
-          zoom: 16
-        });
-        circle = new google.maps.Circle({
-          map: map,
-          center: {lat: geo.coords.latitude, lng: geo.coords.longitude},
-          radius: geo.coords.accuracy,
-          fillColor : '#238EDB',
-          lineColor : '#275DDB'
-        })
-        $.post('/api/v1/location', clone.coords)
-      })
-    }
-
-  </script>
+  <div class='row'>
+    <div class='col-md-8 col-md-offset-2'>
+      <button onclick="getLocation()"> Get Location </button>
+      <p id="gotten"></p>
+      <pre id="message">message</pre>
+      <div id='map'></div>
+    </div>
+  </div>
+  <script src='/geohunt.js'></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_FST7U4gL1vUp_ekK6-BaNim9I3f3HSI"
     async defer></script>
 </body>

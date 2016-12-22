@@ -8,12 +8,12 @@ var bodyParser = require('body-parser');
 var web = __dirname + '/web'
 var app = express()
 
-// app.use(logger('dev'))
+app.use(logger('dev'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.post('/api/v1/location', (req, res) => {
-  console.log(`lat:${req.body.latitude}, long:${req.body.longitude}, acc:${req.body.accuracy} meters`)
+  console.log(`user checking in - lat:${req.body.latitude}, long:${req.body.longitude}, acc:${req.body.accuracy} meters`)
   res.sendStatus(200)
 })
 

@@ -1,0 +1,13 @@
+location: {
+  coords: {
+    lat: num,
+    long: num
+  },
+  clues: [
+    {
+      range: num,
+      text: string
+    }
+  ],
+  range: num
+}
