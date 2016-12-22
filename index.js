@@ -17,9 +17,13 @@ app.post('/api/v1/location', (req, res) => {
   res.sendStatus(200)
 })
 
-
-
 app.use(express.static(web))
+
+app.get('/*', function(req, res){
+  res.sendFile(web + '/index.html');
+});
+
+
 var privateKey  = fs.readFileSync('secret/server.key', 'utf8');
 var certificate = fs.readFileSync('secret/server.crt', 'utf8');
 var cred = {key: privateKey, cert: certificate}

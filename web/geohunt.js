@@ -1,3 +1,22 @@
+var app = angular.module("GeoHuntApp", ["ngRoute"])
+  .config(function($routeProvider, $locationProvider) {
+    $routeProvider
+      .when("/main", {
+        templateUrl : "routes/main.html"
+      })
+      .when("/create", {
+        templateUrl : "routes/create.html",
+        controller : "createCtrl"
+      })
+      .otherwise({
+        templateUrl : "routes/main.html"
+      })
+    $locationProvider.html5Mode(true)
+  })
+  .controller("createCtrl", function ($scope) {
+    
+  })
+
 function cloneAsObject(obj) {
   if (obj === null || !(obj instanceof Object)) {
       return obj;
