@@ -1,2 +1,77 @@
 <h1>Create PlaceHolder</h1>
-<a href='main'>main</a>
+<div>
+  <a href='main' class='btn btn-primary'>main</a>
+</div>
+<div>
+  <button class='btn btn-primary' ng-click='createRef.popup()'>Add New Location</button>
+</div>
+
+
+
+
+
+<div id="locationModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Add New Location</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="nameInput">Name</label>
+            <input type="text" class="form-control" id="nameInput" placeholder="Name"
+              ng-model="createRef.current.name">
+          </div>
+          <div class="form-group">
+            <label>Location <button class='btn btn-primary'
+              ng-click='createRef.fillLocation()'>Get Current Location</button></label>
+            <p>Latitude: <span id='newLat'>{{createRef.current.lat || '---'}}
+            </span> Longitude: <span id='newLong'>{{createRef.current.long || '---'}}</span></p>
+          </div>
+          <div class="form-group">
+            <label for="rangeInput">Range</label>
+            <input type='number' class='form-control' id='rangeInput' placeHolder="Range">
+          </div>
+          <div class='form-group'>
+            <label>
+              Clues
+              <button class='btn btn-primary' ng-click='createRef.addClue()'>
+                {{createRef.current.addOrCreate}} Clue
+              </button>
+            </label>
+            <div class='form-group col-sm-offset-1'>
+              <label for='clueTextInput'>Clue Message</label>
+              <input type='text' class='form-control' id='clueTextInput'
+                placeholder='Clue Message' ng-model='createRef.current.newClue.text'>
+            </div>
+            <div class='form-group col-sm-offset-1'>
+              <label for='clueRangeInput'>Clue Range</label>
+              <input type='number' class='form-control' id='clueRangeInput'
+                placeholder='Clue Message' ng-model='createRef.current.newClue.range'>
+            </div>
+            <ul class='unstyled'>
+              <li ng-repeat='clue in createRef.current.clues'>
+                <button class='btn btn-danger' ng-click='createRef.removeClue(clue)'>
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+                <button class='btn btn-warning' ng-click='createRef.editClue(clue)'>
+                  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                </button>
+                  {{clue.text}}
+              </li>
+            </ul>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click='createRef.popdown()'>
+          Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
