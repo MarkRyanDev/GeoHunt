@@ -12,9 +12,21 @@ app.use(logger('dev'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-app.post('/api/v1/location', (req, res) => {
-  console.log(`user checking in - lat:${req.body.latitude}, long:${req.body.longitude}, acc:${req.body.accuracy} meters`)
-  res.sendStatus(200)
+app.post('/api/v1/hunts/:name', (req, res) => {
+  fs.stat('hunts/' + req.params.name, (err, stats) => {
+    if (stats && stats.isFile()){
+      res.status(409)
+      res.json({
+        status: 409,
+        message: 'name already used'
+      })
+    } else {
+      fs.writeFile('hunts/' + req.params.name, JSON.stringify(req.body), err => {
+        if (err) console.error(err);
+        else res.sendStatus(201)
+      })
+    }
+  })
 })
 
 app.use(express.static(web))

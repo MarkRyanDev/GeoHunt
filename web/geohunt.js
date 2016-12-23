@@ -2,41 +2,38 @@ var app = angular.module("GeoHuntApp", ["ngRoute"])
   .config(function($routeProvider, $locationProvider) {
     $routeProvider
       .when("/main", {
-        templateUrl : "routes/main.html"
+        templateUrl : "routes/main.html",
+        controller : 'mainCtrl as mainRef'
       })
       .when("/create", {
         templateUrl : "routes/create.html",
         controller : "createCtrl as createRef"
       })
       .otherwise({
-        templateUrl : "routes/main.html"
+        redirectTo:"/main"
       })
     $locationProvider.html5Mode(true)
   })
-  .controller("createCtrl", function ($scope) {
+  .controller("createCtrl", function ($scope, $window) {
     let create = this
     create.locations = []
     create.current = {
-      init : () =>
-        create.current = {
-          clues : [],
-          name : "",
-          lat : null,
-          long : null,
-          range : null,
-          newClue: {
-            text: "",
-            range: null
-          },
-          addOrCreate : 'Add'
+      init : () => {
+        create.current.clues = []
+        create.current.name = ""
+        create.current.lat = null
+        create.current.long = null
+        create.current.range = null
+        create.current.newClue = {
+          text : "",
+          range : null
         }
+        create.current.addOrCreate = 'Add'
+      }
     }
-    create.current.init()
     create.popup = () => {
       $('#locationModal').modal('show')
-    }
-    create.popdown = () => {
-      $('#locationModal').modal('hide')
+      create.current.init()
     }
     create.fillLocation = () => {
       navigator.geolocation.getCurrentPosition(geo => {
@@ -62,13 +59,39 @@ var app = angular.module("GeoHuntApp", ["ngRoute"])
       create.current.addOrCreate = 'Edit'
     }
     create.addLocation = () => {
-      delete create.current.newClue
-      delete create.current.addOrCreate
-      create.locations.push(JSON.parse(JSON.stringify(create.current)))
+      if(!create.editing){
+        delete create.current.newClue
+        delete create.current.addOrCreate
+        create.locations.push(JSON.parse(JSON.stringify(create.current)))
+      }
+      $('#locationModal').modal('hide')
+    }
+    create.removeLocation = (location) => create.locations.splice(create.locations.indexOf(location), 1)
+    create.editLocation = (location) => {
       create.current.init()
+      for (let key in location) create.current[key] = location[key]
+      create.editing = true
+      $('#locationModal').modal('show')
+    }
+    create.createHunt = () => {
+      let hunt = {
+        name: create.name,
+        locations: create.locations
+      }
+      $.post('/api/v1/hunts/' + hunt.name, hunt, (data, status) => {
+        if (data !== 'Created') {
+          alert('That Hunt name is already used, please pick a new one')
+        } else {
+          $window.location.href = '/main'
+        }
+      })
     }
   })
 
+  .controller("mainCtrl", function ($scope) {
+    let main = this
+    
+  }
 // function cloneAsObject(obj) {
 //   if (obj === null || !(obj instanceof Object)) {
 //       return obj;
