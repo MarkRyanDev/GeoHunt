@@ -1,6 +1,6 @@
 <h1>Creating {{createRef.name || 'New GeoHunt'}}</h1>
 <div>
-  <a href='main' class='btn btn-primary'>main</a>
+  <a href='main' class='btn btn-primary'>Back to Main</a>
 </div>
 <form>
   <div class="form-group">
@@ -44,23 +44,24 @@
               ng-model="createRef.current.name">
           </div>
           <div class="form-group">
-            <label>Location <button class='btn btn-primary'
-              ng-click='createRef.fillLocation()'>Get Current Location</button></label>
+            <label>Location</label>
+            <button class='btn btn-primary' ng-click='createRef.fillLocation()'>
+              Get Current Location
+            </button>
+            <button class='btn btn-primary' ng-click='createRef.toggleMap()'>
+              {{createRef.showMap ? 'Hide' : 'Show'}} Map
+            </button>
+            <div id='createLocationMap' ng-show='createRef.showMap' class='map'></div>
             <p>Latitude: <span id='newLat'>{{createRef.current.lat || '---'}}
             </span> Longitude: <span id='newLong'>{{createRef.current.long || '---'}}</span></p>
           </div>
           <div class="form-group">
             <label for="rangeInput">Range</label>
             <input type='number' class='form-control' id='rangeInput' placeHolder="Range"
-              ng-model='createRef.current.range'>
+              ng-model='createRef.current.range' ng-change='createRef.updateRange()'>
           </div>
           <div class='form-group'>
-            <label>
-              Clues
-              <button class='btn btn-primary' ng-click='createRef.addClue()'>
-                {{createRef.current.addOrCreate}} Clue
-              </button>
-            </label>
+            <label>Clues</label>
             <div class='form-group col-sm-offset-1'>
               <label for='clueTextInput'>Clue Message</label>
               <input type='text' class='form-control' id='clueTextInput'
@@ -71,8 +72,11 @@
               <input type='number' class='form-control' id='clueRangeInput'
                 placeholder='Clue Message' ng-model='createRef.current.newClue.range'>
             </div>
+            <button class='btn btn-primary' ng-click='createRef.addClue()'>
+              {{createRef.current.addOrCreate}} Clue
+            </button>
             <ul>
-              <li ng-repeat='clue in createRef.current.clues'>
+              <li ng-repeat='clue in createRef.current.clues track by $index'>
                 <button class='btn btn-danger' ng-click='createRef.removeClue(clue)'>
                   <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>

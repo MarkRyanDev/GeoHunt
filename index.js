@@ -12,6 +12,7 @@ app.use(logger('dev'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+//add new hunt
 app.post('/api/v1/hunts/:name', (req, res) => {
   fs.stat('hunts/' + req.params.name, (err, stats) => {
     if (stats && stats.isFile()){
@@ -26,6 +27,26 @@ app.post('/api/v1/hunts/:name', (req, res) => {
         else res.sendStatus(201)
       })
     }
+  })
+})
+
+app.get('/api/v1/hunts', (req, res) => {
+  fs.readdir('hunts', (err, files) => {
+    if (err) {
+      console.error(err)
+      res.sendStatus(400)
+    }
+    else res.json(files)
+  })
+})
+
+app.get('/api/v1/hunts/:name', (req, res) => {
+  fs.readFile('hunts/' + req.params.name, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err)
+      res.sendStatus(400)
+    }
+    else res.json(JSON.parse(data))
   })
 })
 

@@ -1,0 +1,31 @@
+<h1>{{playRef.name}}</h1>
+<a href='main' class='btn btn-primary'>Back To Main</a>
+<h3>{{playRef.hunt.locations[playRef.viewing].name}}</h3>
+<button class='btn btn-primary' ng-click='playRef.toggleMap()'>
+  {{playRef.showMap ? 'Hide' : 'Show'}} Map
+</button>
+<div id='playMap' ng-show='playRef.showMap' class='map'></div>
+<p>Clues</p>
+<ul>
+  <li ng-repeat="clue in playRef.viewClues()">
+    {{clue.text}}
+  </li>
+</ul>
+<button class="btn bbn-primary" ng-click="playRef.check()">Check</button>
+<button class="btn btn-primary" ng-click="playRef.prev()"
+  ng-hide="playRef.viewing === 0">Prev</button>
+<button class="btn btn-primary" ng-click="playRef.next()"
+  ng-hide="playRef.viewing === playRef.progress || (playRef.done && playRef.viewing === playRef.progress - 1)">Next</button>
+
+<div id="winModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>You Win!<p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -2,5 +2,8 @@
 <a href='create' class='btn btn-primary'>Create New Hunt</a>
 <h2>GeoHunts</h2>
 <ul>
-  <li ng-repeat='hunt in '
+  <li ng-repeat='hunt in mainRef.hunts'>
+    <a href=`play/${hunt}` class='btn btn-primary' ng-click='mainRef.handlePlay(hunt)'>Play</a>
+    {{hunt}}
+  </li>
 </ul>
